@@ -1,11 +1,11 @@
-name: Model Training Workflow  # Nombre significativo para tu flujo de trabajo
+name: Model Training Workflow
 
 on:
   push:
     branches:
-      - main  # Cambia según tu rama principal
+      - main
   schedule:
-    - cron: '0 */6 * * *'  # Ejecutar cada 6 horas
+    - cron: '0 */6 * * *'
   workflow_dispatch:
     inputs:
       reason:
@@ -21,13 +21,24 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Train model
-        env:
-          SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+      - name: Verify requirements.txt
+        run: |
+          if [ -f "requirements.txt" ]; then
+            echo "requirements.txt found."
+          elif [ -f "src/requirements.txt" ]; then
+            echo "src/requirements.txt found."
+            mv src/requirements.txt requirements.txt
+          else
+            echo "Error: requirements.txt not found."
+            exit 1  # Salir con un código de error para detener el flujo de trabajo
+          fi
+
+      - name: Install dependencies
+        if: success()  # Ejecutar solo si el paso anterior fue exitoso
         run: |
           pip3 install virtualenv
           virtualenv venv
           source venv/bin/activate
-          pip install -r src/requirements.txt
+          pip install -r requirements.txt  # Utiliza el archivo correcto
 
           echo "Training Completed"
