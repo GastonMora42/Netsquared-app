@@ -21,24 +21,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Verify requirements.txt
+      - name: Verify directory contents
         run: |
-          if [ -f "requirements.txt" ]; then
-            echo "requirements.txt found."
-          elif [ -f "src/requirements.txt" ]; then
-            echo "src/requirements.txt found."
-            mv src/requirements.txt requirements.txt
-          else
-            echo "Error: requirements.txt not found."
-            exit 1  # Salir con un código de error para detener el flujo de trabajo
-          fi
+          ls -la  # Listar contenido del directorio para verificar la estructura
+          find . -name "requirements.txt"  # Buscar el archivo en el directorio
 
       - name: Install dependencies
-        if: success()  # Ejecutar solo si el paso anterior fue exitoso
         run: |
+          cd src  # Cambiar al directorio correcto si es necesario
           pip3 install virtualenv
           virtualenv venv
           source venv/bin/activate
-          pip install -r requirements.txt  # Utiliza el archivo correcto
+          pip install -r requirements.txt  # Acceder al archivo correcto
 
           echo "Training Completed"
