@@ -1,4 +1,30 @@
-name:
+name: Continuous Training
+
 on:
- jobs:
- 
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: Why to run this?
+        required: false
+        default: running CT
+
+jobs:
+  continuous_training:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Train model
+        env:
+          SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+        run: |
+          pip3 install virtualenv
+          virtualenv venv
+          source venv/bin/activate
+          pip install -r src/requirements.txt
+
+          echo "Training Completed"
