@@ -21,17 +21,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Verify directory contents
-        run: |
-          ls -la  # Listar contenido del directorio para verificar la estructura
-          find . -name "requirements.txt"  # Buscar el archivo en el directorio
-
       - name: Install dependencies
         run: |
-          cd src  # Cambiar al directorio correcto si es necesario
           pip3 install virtualenv
           virtualenv venv
           source venv/bin/activate
-          pip install -r requirements.txt  # Acceder al archivo correcto
+          pip install -r src/requirements.txt  # Instalar desde el directorio src
 
           echo "Training Completed"
