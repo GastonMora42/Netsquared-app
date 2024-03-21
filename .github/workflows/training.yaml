@@ -1,8 +1,11 @@
-name: Continuous Training
+name: Model Training Workflow  # Nombre significativo para tu flujo de trabajo
 
 on:
+  push:
+    branches:
+      - main  # Cambia según tu rama principal
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */6 * * *'  # Ejecutar cada 6 horas
   workflow_dispatch:
     inputs:
       reason:
@@ -16,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Train model
         env:
