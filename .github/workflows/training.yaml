@@ -26,6 +26,17 @@ jobs:
           pip3 install virtualenv
           virtualenv venv
           source venv/bin/activate
-          pip install -r requirements.txt  # Instalar desde el directorio src
+          pip install -r src/requirements.txt  # Instalar desde el directorio src
 
-          echo "Training Completed"
+          echo "Dependencies Installed"
+
+      - name: Run Python Scripts
+        run: |
+          source venv/bin/activate  # Activar entorno virtual
+          python src/get_last_file.py  # Ejecutar script1 desde src
+          python src/convert.py  # Ejecutar script2 desde src
+          python src/tracker.py  # Ejecutar script3 desde src
+          python src/prepare.py  # Ejecutar script3 desde src
+          python src/train_model.py  # Ejecutar script3 desde src
+
+          echo "Scripts Completed"
